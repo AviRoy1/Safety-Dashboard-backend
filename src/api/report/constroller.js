@@ -1,4 +1,8 @@
+const LocationModel = require("./location");
 const ReportModel = require("./model");
+const StatusModel = require("./statusModel");
+const TagModel = require("./tagModel");
+const ViolationModel = require("./violationTypeModel");
 
 exports.addReport = async (req, res, next) => {
   try {
@@ -23,7 +27,28 @@ exports.addReport = async (req, res, next) => {
       imagepath: imagepath,
       assigned: assigned,
     });
-    console.log(newReport);
+    const isTagPresent = await TagModel.findOne({ name: tags });
+    if (!isTagPresent) {
+      await TagModel.create({ name: tags });
+    }
+    const isLocationPresent = await LocationModel.findOne({
+      name: location,
+    });
+    if (!isLocationPresent) {
+      await LocationModel.create({ name: location });
+    }
+    const isStatusPresent = await StatusModel.findOne({
+      name: status,
+    });
+    if (!isStatusPresent) {
+      await StatusModel.create({ name: status });
+    }
+    const isViolationPresent = await ViolationModel.findOne({
+      name: violationType,
+    });
+    if (!isViolationPresent) {
+      await ViolationModel.create({ name: violationType });
+    }
     return res
       .status(200)
       .json({ reports: newReport, message: "Add successfully" });
@@ -106,5 +131,41 @@ exports.findReports = async (req, res, next) => {
     return res.status(200).json({ reports: allReports });
   } catch (error) {
     next(error);
+  }
+};
+
+exports.fetchAllTags = async (req, res, next) => {
+  try {
+    const allTags = await TagModel.find();
+    return res.status(200).json({ tags: allTags });
+  } catch (e) {
+    next(e);
+  }
+};
+
+exports.fetchAllStatus = async (req, res, next) => {
+  try {
+    const allStatus = await StatusModel.find();
+    return res.status(200).json({ status: allStatus });
+  } catch (e) {
+    next(e);
+  }
+};
+
+exports.fetchAllLocatios = async (req, res, next) => {
+  try {
+    const allLocations = await LocationModel.find();
+    return res.status(200).json({ locations: allLocations });
+  } catch (e) {
+    next(e);
+  }
+};
+
+exports.fetchAllViolationTyps = async (req, res, next) => {
+  try {
+    const allViolationTyps = await ViolationModel.find();
+    return res.status(200).json({ violations: allViolationTyps });
+  } catch (e) {
+    next(e);
   }
 };
