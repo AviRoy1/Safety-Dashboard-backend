@@ -9,6 +9,7 @@ const {
   fetchAllStatus,
   fetchAllLocatios,
   fetchAllViolationTyps,
+  downloadReports,
 } = require(`./constroller`);
 const { isAuthenticated } = require("../../middlewares/auth");
 
@@ -21,6 +22,8 @@ router.get("/locations", fetchAllLocatios);
 router.get("/tags", fetchAllTags);
 router.get("/status", fetchAllStatus);
 router.get("/violationtypes", fetchAllViolationTyps);
+router.get("/violationtypes", fetchAllViolationTyps);
+router.get("/download-pdf", downloadReports);
 
 // router.post("/add-comment", addComment);
 

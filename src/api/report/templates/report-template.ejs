@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+      font-family: 'Plus Jakarta Sans', sans-serif; 
+    }
+  </style>
+  <title>Reports</title>
+</head>
+<body>
+  <h1>Report</h1>
+  <% reports.forEach(report => { %>
+    <h4>Report ID - <%= report._id.toString() %></h4>
+    <table>
+      <tr>
+        <th>Client</th>
+        <td><%= report.client %></td>
+      </tr>
+      <tr>
+        <th>Cam Name</th>
+        <td><%= report.camname %></td>
+      </tr>
+      <tr>
+        <th>Location</th>
+        <td><%= report.location %></td>
+      </tr>
+      <tr>
+        <th>Violation Type</th>
+        <td><%= report.violationType %></td>
+      </tr>
+      <tr>
+        <th>Tags</th>
+        <td><%= report.tags %></td>
+      </tr>
+      <tr>
+        <th>Assigned</th>
+        <td><%= report.assigned %></td>
+      </tr>
+      <tr>
+        <th>Status</th>
+        <td><%= report.status %></td>
+      </tr>
+      <tr>
+        <th>Live</th>
+        <td><%= report.live %></td>
+      </tr>
+      <tr>
+        <th>Date</th>
+        <td><%= report.createdAt.toISOString().split('T')[0] %></td>
+      </tr>
+    </table>
+
+    <!-- Display Image -->
+    <img src="<%= report.imagepath %>" alt="Report Image" style="max-width:  400px; max-height: 400px; margin-top: 20px;">
+
+    <!-- Display Created At Date -->
+    <!-- <p>Created At: <%= report.createdAt.toISOString().split('T')[0] %></p> -->
+
+    <!-- Add some space between reports -->
+    <hr style="margin-top: 30px;">
+
+  <% }); %>
+</body>
+</html>
