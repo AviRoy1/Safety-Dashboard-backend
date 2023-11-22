@@ -4,6 +4,8 @@ const bcrypt = require("bcrypt");
 const dotenv = require("dotenv");
 dotenv.config();
 const { sendToken } = require("../../utils/sendToken");
+const { default: mongoose } = require("mongoose");
+const ClientModel = require("../client/model");
 
 exports.addUser = async (req, res, next) => {
   try {
@@ -19,6 +21,20 @@ exports.addUser = async (req, res, next) => {
       username: username,
       password: encyptPass,
     });
+    console.log(newUser);
+    if (client) {
+      const oldclient = await ClientModel.findById(client);
+      if (!oldclient) {
+        res.send("No such client exist");
+      }
+      oldclient.stackHolders.push(newUser._id);
+
+      newUser.client = oldclient._id;
+      console.log("hitting............", oldclient._id);
+
+      await newUser.save();
+      await oldclient.save();
+    }
     res.send("Successfully add new user!!");
   } catch (e) {
     console.log(e);
@@ -32,17 +48,29 @@ exports.login = async (req, res, next) => {
     const user = await UserModel.findOne({ username: username }).select(
       "+password"
     );
-    console.log(user);
     if (!user) {
       return res.status(401).json({ message: "Invalid username or password" });
     }
-    // const comparePassword = await bcrypt.compare(password, user.password);
-    // if (!comparePassword) {
-    //   return res.status(401).json({ message: "Invalid username or password" });
-    // }
+    const comparePassword = await bcrypt.compare(password, user.password);
+    if (!comparePassword) {
+      return res.status(401).json({ message: "Invalid username or password" });
+    }
     sendToken(res, user, `Welcome back, ${user.username}`, 200);
   } catch (e) {
     console.log(e);
+    next(e);
+  }
+};
+
+exports.logout = async (req, res, next) => {
+  try {
+    res.status(200).cookie("token", null, {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
+  } catch (e) {
     next(e);
   }
 };

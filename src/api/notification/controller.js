@@ -8,7 +8,7 @@ exports.markAllSeen = async (req, res, next) => {
       curNoti.status = "seen";
       await curNoti.save();
     }
-    res.status(200).josn({ message: "Done!!" });
+    return res.status(200).json({ message: "Done!!" });
   } catch (e) {
     next(e);
   }
@@ -18,7 +18,7 @@ exports.fetchUnseenNoti = async (req, res, next) => {
   try {
     const allNotifications = await NotificationModel.find({ status: "unseen" });
 
-    res.status(200).josn({ notification: allNotifications });
+    return res.status(200).json({ notification: allNotifications });
   } catch (e) {
     next(e);
   }
