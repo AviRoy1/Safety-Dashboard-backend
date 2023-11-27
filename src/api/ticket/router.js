@@ -4,12 +4,14 @@ const {
   addTicket,
   addComment,
   getAllTickets,
-  changeTicketStatus,
+  changeTicketStatusToProgress,
+  changeTicketStatusToResolved,
 } = require("./controller");
 
 router.post("/add-ticket", addTicket);
 router.post("/add-comment", addComment);
 router.get("/tickets", getAllTickets);
-router.put("/status", changeTicketStatus);
+router.put("/status/in-progress", changeTicketStatusToProgress);
+router.put("/status/resolved", changeTicketStatusToResolved);
 
 module.exports = router;

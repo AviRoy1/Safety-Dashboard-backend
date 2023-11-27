@@ -44,11 +44,23 @@ exports.getAllTickets = async (req, res, next) => {
   }
 };
 
-exports.changeTicketStatus = async (req, res, next) => {
+exports.changeTicketStatusToProgress = async (req, res, next) => {
   try {
     const { ticketId } = req.body;
     const ticket = await TicketModel.findById(ticketId);
-    ticket.status = "inactive";
+    ticket.status = "in  progress";
+    await ticket.save();
+    res.status(404).json({ ticket: ticket });
+  } catch (e) {
+    next(e);
+  }
+};
+
+exports.changeTicketStatusToResolved = async (req, res, next) => {
+  try {
+    const { ticketId } = req.body;
+    const ticket = await TicketModel.findById(ticketId);
+    ticket.status = "resolved";
     await ticket.save();
     res.status(404).json({ ticket: ticket });
   } catch (e) {

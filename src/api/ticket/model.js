@@ -18,7 +18,11 @@ const ticketSchema = new mongoose.Schema(
       url: { type: String },
     },
     subject: { type: String },
-    status: { type: String, enum: ["active", "inactive"], default: "active" },
+    status: {
+      type: String,
+      enum: ["open", "in  progress", "resolved"],
+      default: "open",
+    },
     comments: [
       {
         message: { type: String },
