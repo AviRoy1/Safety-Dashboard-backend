@@ -21,7 +21,7 @@ exports.addComment = async (req, res, next) => {
     const { message, userId, ticketId } = req.body;
     const ticket = await TicketModel.findById(ticketId);
     if (!ticket) {
-      res.status(404).json({ message: "Ticket does not found" });
+      res.status(200).json({ message: "Ticket does not found" });
     }
     ticket.comments.push({
       message: message,
@@ -38,7 +38,7 @@ exports.addComment = async (req, res, next) => {
 exports.getAllTickets = async (req, res, next) => {
   try {
     const allTickets = await TicketModel.find().sort({ createdAt: -1 });
-    res.status(404).json({ ticket: allTickets });
+    res.status(200).json({ ticket: allTickets });
   } catch (e) {
     next(e);
   }
@@ -50,7 +50,7 @@ exports.changeTicketStatusToProgress = async (req, res, next) => {
     const ticket = await TicketModel.findById(ticketId);
     ticket.status = "in  progress";
     await ticket.save();
-    res.status(404).json({ ticket: ticket });
+    res.status(200).json({ ticket: ticket });
   } catch (e) {
     next(e);
   }
@@ -62,7 +62,7 @@ exports.changeTicketStatusToResolved = async (req, res, next) => {
     const ticket = await TicketModel.findById(ticketId);
     ticket.status = "resolved";
     await ticket.save();
-    res.status(404).json({ ticket: ticket });
+    res.status(200).json({ ticket: ticket });
   } catch (e) {
     next(e);
   }

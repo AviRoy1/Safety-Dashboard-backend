@@ -19,52 +19,15 @@ const ViolationModel = require("./api/report/violationTypeModel");
 dotenv.config();
 const app = express();
 
+(date = "2024-01-23"), (time = "19:30:09");
+console.log(new Date(`${date}T${time}`));
+
 // set security HTTP headers
 app.use(helmet());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-
-// async function fetchAllStatus() {
-//   try {
-//     const allReports = await ReportModel.find();
-//     for (let i = 0; i < allReports.length; i++) {
-//       let curReport = allReports[i];
-
-//       const isTagPresent = await TagModel.findOne({
-//         name: curReport.tags,
-//       });
-//       if (!isTagPresent) {
-//         await TagModel.create({ name: curReport.tags });
-//       }
-//       const isLocationPresent = await LocationModel.findOne({
-//         name: curReport.location,
-//       });
-//       if (!isLocationPresent) {
-//         await LocationModel.create({ name: curReport.location });
-//       }
-//       const isStatusPresent = await StatusModel.findOne({
-//         name: curReport.status,
-//       });
-//       if (!isStatusPresent) {
-//         await StatusModel.create({ name: curReport.status });
-//       }
-//       const isViolationPresent = await ViolationModel.findOne({
-//         name: curReport.violationType,
-//       });
-//       if (!isViolationPresent) {
-//         await ViolationModel.create({
-//           name: curReport.violationType,
-//         });
-//       }
-//     }
-//   } catch (e) {
-//     console.log(e);
-//   }
-// }
-
-// fetchAllStatus();
 
 app.use(
   cors({

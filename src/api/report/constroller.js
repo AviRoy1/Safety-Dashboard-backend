@@ -188,57 +188,43 @@ exports.fetchAllViolationTyps = async (req, res, next) => {
 
 exports.downloadReports = async (req, res, next) => {
   try {
-    const { location, status, tag, violationType, startTime, endTime } =
-      req.query;
-    console.log(
-      req.query,
+    const {
       location,
       status,
       tag,
       violationType,
+      startDate,
+      endDate,
       startTime,
-      endTime
-    );
-    let matchQuery = {};
+      endTime,
+    } = req.query;
 
-    if (startTime && endTime) {
+    // Date & time format - date= yyyy-mm-dd, time=hh:mm or hh:mm:ss
+    const matchQuery = {};
+
+    if (startDate && endDate && startTime && endTime) {
+      const startDateTime = `${startDate}T${startTime}`;
+      const endDateTime = `${endDate}T${endTime}`;
+
       matchQuery.createdAt = {
-        $gte: new Date(startTime),
-        $lte: new Date(endTime),
+        $gte: new Date(startDateTime),
+        $lte: new Date(endDateTime),
       };
     }
-    if (
-      location !== null &&
-      location !== "undefined" &&
-      location !== undefined
-    ) {
-      matchQuery["location"] = location;
-    }
-    if (status !== null && status !== "undefined" && status !== undefined) {
-      matchQuery["status"] = status;
-    }
-    if (tag !== null && tag !== "undefined" && tag !== undefined) {
-      matchQuery["tags"] = tag;
-    }
-    if (
-      violationType !== null &&
-      violationType !== "undefined" &&
-      violationType !== undefined
-    ) {
-      matchQuery["violationType"] = violationType;
-    }
-    const reports = await ReportModel.aggregate([
-      {
-        $match: matchQuery,
-      },
-    ]);
+
+    if (location) matchQuery.location = location;
+    if (status) matchQuery.status = status;
+    if (tag) matchQuery.tags = tag;
+    if (violationType) matchQuery.violationType = violationType;
+
+    const reports = await ReportModel.aggregate([{ $match: matchQuery }]);
+
     const templatePath = path.join(
       __dirname,
       "templates",
       "report-template.ejs"
     );
     const templateContent = await readFileAsync(templatePath, "utf-8");
-
     const compiledTemplate = ejs.compile(templateContent)({ reports });
 
     const browser = await puppeteer.launch();
