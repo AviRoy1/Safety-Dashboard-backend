@@ -20,10 +20,8 @@ mail.post("/send", async (req, res, next) => {
   try {
     const { user, subject, body } = req.body;
 
-    // Retrieve access token
     const accessToken = await oauth2Client.getAccessToken();
 
-    // Create a nodemailer transport with OAuth2 authentication
     const transport = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -36,7 +34,6 @@ mail.post("/send", async (req, res, next) => {
       },
     });
 
-    // Define mail options
     const mailOptions = {
       from: "NODE <ravijit512@gmail.com>",
       to: user,
@@ -44,7 +41,6 @@ mail.post("/send", async (req, res, next) => {
       text: body,
     };
 
-    // Send the email
     const result = await transport.sendMail(mailOptions);
     res.send({ msg: "DONE!!" });
   } catch (error) {
