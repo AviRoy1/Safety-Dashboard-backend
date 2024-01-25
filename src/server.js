@@ -19,9 +19,6 @@ const ViolationModel = require("./api/report/violationTypeModel");
 dotenv.config();
 const app = express();
 
-(date = "2024-01-23"), (time = "19:30:09");
-console.log(new Date(`${date}T${time}`));
-
 // set security HTTP headers
 app.use(helmet());
 
