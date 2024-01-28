@@ -3,6 +3,9 @@ const { google } = require("googleapis");
 const dayjs = require("dayjs");
 const { v4: uuid } = require("uuid");
 const { OAuth2Client } = require("google-auth-library");
+let CLIENT_ID =
+    "406430181104-vmkv3e7e1gfsefhej5dri3hdiben2f14.apps.googleusercontent.com",
+  CLIENT_SECRET = "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";
 
 const dotenv = require("dotenv");
 const { updateString, getTokenString } = require("./gmailToken-controller");
@@ -10,11 +13,7 @@ dotenv.config();
 
 const REDIRECT_URL = `http://localhost:8100/api/v1/meet/google/redirect`;
 
-const oauth2Client = new OAuth2Client(
-  process.env.CLIENT_ID,
-  process.env.CLIENT_SECRET,
-  REDIRECT_URL
-);
+const oauth2Client = new OAuth2Client(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL);
 
 const scopes = ["https://www.googleapis.com/auth/calendar"];
 
