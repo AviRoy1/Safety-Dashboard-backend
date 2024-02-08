@@ -125,7 +125,7 @@ exports.findReports = async (req, res, next) => {
       endTime,
       clientId,
     } = req.body;
-    // console.log(req.body);
+
     let matchQuery = {};
 
     if (startTime && endTime) {
@@ -134,21 +134,21 @@ exports.findReports = async (req, res, next) => {
         $lte: new Date(endTime),
       };
     }
-    if (curLocation !== null) {
+    if (curLocation) {
       matchQuery["location"] = curLocation.label;
     }
-    if (curStatus !== null) {
+    if (curStatus) {
       // console.log(curStatus.label);
       matchQuery["status"] = curStatus.label;
     }
-    if (curTag !== null) {
+    if (curTag) {
       matchQuery["tags"] = curTag.label;
     }
-    if (curViolation !== null) {
+    if (curViolation) {
       matchQuery["violationType"] = curViolation.label;
     }
     if (clientId !== null || clientId) {
-      matchQuery["client"] = mongoose.Types.ObjectId(clientId);
+      matchQuery["client"] = new mongoose.Types.ObjectId(clientId);
     }
     const allReports = await ReportModel.aggregate([
       {
