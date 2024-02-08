@@ -8,6 +8,7 @@ const fs = require("fs");
 const path = require("path");
 const { promisify } = require("util");
 const ejs = require("ejs");
+const mongoose = require("mongoose");
 
 const readFileAsync = promisify(fs.readFile);
 
@@ -115,8 +116,15 @@ exports.addComment = async (req, res, next) => {
 
 exports.findReports = async (req, res, next) => {
   try {
-    const { curLocation, curStatus, curTag, curViolation, startTime, endTime } =
-      req.body;
+    const {
+      curLocation,
+      curStatus,
+      curTag,
+      curViolation,
+      startTime,
+      endTime,
+      clientId,
+    } = req.body;
     // console.log(req.body);
     let matchQuery = {};
 
@@ -138,6 +146,9 @@ exports.findReports = async (req, res, next) => {
     }
     if (curViolation !== null) {
       matchQuery["violationType"] = curViolation.label;
+    }
+    if (clientId !== null || clientId) {
+      matchQuery["client"] = mongoose.Types.ObjectId(clientId);
     }
     const allReports = await ReportModel.aggregate([
       {
@@ -244,6 +255,3 @@ exports.downloadReports = async (req, res, next) => {
     next(e);
   }
 };
-
-
-
