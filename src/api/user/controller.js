@@ -49,12 +49,18 @@ exports.login = async (req, res, next) => {
       "+password"
     );
     if (!user) {
-      return res.status(401).json({ message: "Invalid username or password" });
+      return res.status(401).json({ message: "Invalid username" });
     }
-    const comparePassword = await bcrypt.compare(password, user.password);
-    if (!comparePassword) {
-      return res.status(401).json({ message: "Invalid username or password" });
-    }
+    // const comparePassword = await bcrypt.compare(password, user.password);
+    // if (!comparePassword) {
+    //   return res.status(401).json({ message: "Invalid username or password" });
+    // }
+
+    const salt = await bcrypt.genSalt(10);
+    const encyptPass = await bcrypt.hash(password, salt);
+    user.password = encyptPass;
+    await user.save();
+
     sendToken(res, user, `Welcome back, ${user.username}`, 200);
   } catch (e) {
     console.log(e);
